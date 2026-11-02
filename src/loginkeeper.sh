@@ -25,7 +25,7 @@ LAUNCHERS=" com.webos.app.home com.homebrew.openlauncher com.homebrew.loginkeepe
 ITEMS="Local_Storage IndexedDB Cookies Cookies-journal Service_Worker/Database Service_Worker/ScriptCache File_System WebStorage AppsOrigins AppsOrigins-journal databases"
 
 # Defaults, overridden by $CONF
-KEEP=6          # automatic backups to keep (manual ones are kept until deleted)
+KEEP=13         # automatic backups to keep: 13 x 6 hours = 78 hours of history (manual ones are kept until deleted)
 INTERVAL_H=6    # hours between automatic backups
 AUTORESTORE=1   # restore the newest backup by itself when a wipe is detected
 

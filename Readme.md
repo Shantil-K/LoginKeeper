@@ -9,7 +9,7 @@ Web apps keep their sign-ins in one shared Chromium profile at `/var/lib/wam/Def
 ## What it does
 
 - **Backups:** a full copy of the login storage (about 14 MB), saved to `/media/developer/loginkeeper/backups`. The web engine is paused for the fraction of a second the copy takes, so the copy is consistent.
-- **Automatic protection:** a boot hook in Homebrew Channel's `init.d` starts a background job. It makes a backup every 6 hours (keeping the newest 6) and checks every 5 minutes for a wipe.
+- **Automatic protection:** a boot hook in Homebrew Channel's `init.d` starts a background job. It makes a backup every 6 hours, keeps the newest 13 (78 hours of history), and checks every 5 minutes for a wipe.
 - **Wipe detection:** a marker file inside `Local Storage` goes missing, or the database folder is recreated.
 - **Auto restore:** after a wipe it restores the newest backup, but only while you're on the home screen, because a restore restarts the web engine. It restores at most once every 30 minutes.
 - **Apps to restore:** you choose which apps a restore puts back.
@@ -29,5 +29,7 @@ Not covered: native apps like Netflix and Prime Video. They keep their logins el
 
 ```
 ares-package src -o .
-ares-install -d webosroot com.homebrew.loginkeeper_1.0.0_all.ipk
+ares-install -d webosroot com.homebrew.loginkeeper_1.0.1_all.ipk
 ```
+
+Releases are built by GitHub Actions: bump `version` in `src/appinfo.json`, add notes in `.github/release-notes/vX.Y.Z.md`, then push a `vX.Y.Z` tag.

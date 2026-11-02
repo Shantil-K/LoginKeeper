@@ -1,0 +1,49 @@
+# Builds the .ipk and publishes a GitHub release whenever a version tag (v1.2.3) is pushed.
+# Release notes come from .github/release-notes/<tag>.md, or are generated from commits if that file is missing.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install webOS CLI
+        run: npm install -g @webos-tools/cli@3.2.6
+
+      - name: Check the app version matches the tag
+        run: |
+          v=$(node -p "require('./src/appinfo.json').version")
+          if [ "v$v" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::src/appinfo.json says $v but the tag is $GITHUB_REF_NAME"
+            exit 1
+          fi
+
+      - name: Check scripts
+        run: |
+          sh -n src/loginkeeper.sh
+          node --check src/lsdb.js
+          node --check src/js/app.js
+
+      - name: Build ipk
+        run: ares-package src -o .
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes=".github/release-notes/$GITHUB_REF_NAME.md"
+          if [ -f "$notes" ]; then set -- --notes-file "$notes"; else set -- --generate-notes; fi
+          gh release create "$GITHUB_REF_NAME" com.homebrew.loginkeeper_*_all.ipk \
+            --title "Login Keeper $GITHUB_REF_NAME" "$@"

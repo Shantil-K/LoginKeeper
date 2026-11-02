@@ -187,7 +187,7 @@ function renderStatus() {
 	var parts = [];
 	parts.push(newest ? "Last backup " + ago(newest.time) : "No backups yet");
 	parts.push("YouTube is " + (st.liveYoutube ? "signed in" : "not signed in") + " right now");
-	if (st.autostart) parts.push("backs up every " + st.interval + " hours, keeps " + st.keep);
+	if (st.autostart) parts.push("backs up every " + st.interval + " hours, keeps " + st.interval * st.keep + " hours of history");
 	parts.push(st.freeMB + " MB free");
 	det.textContent = parts.join("  ·  ");
 
