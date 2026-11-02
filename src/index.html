@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Login Keeper</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+  <img src="largeIcon.png" alt="">
+  <div>
+    <h1>Login Keeper</h1>
+    <p class="sub">Backs up your app sign-ins (YouTube, Hotstar and other web apps) and puts them back when the TV forgets them.</p>
+  </div>
+</header>
+
+<section id="statuscard" class="card">
+  <div id="statusline" class="statusline">Checking…</div>
+  <div id="statusdetail" class="detail"></div>
+</section>
+
+<section class="row" id="actions">
+  <button class="nav big" id="btnbackup">Back up now</button>
+  <button class="nav toggle" id="btnprotect"><span class="lbl">Automatic protection</span><span class="val">…</span></button>
+  <button class="nav toggle" id="btnautorestore"><span class="lbl">Restore by itself after a reset</span><span class="val">…</span></button>
+</section>
+
+<h2>Apps to restore</h2>
+<div id="apps" class="chips"></div>
+
+<h2>Backups</h2>
+<div id="list" class="list"></div>
+
+<pre id="log" class="log"></pre>
+
+<p class="foot">Covers apps built on the TV's web engine. Netflix and Prime Video are native apps and are not covered.</p>
+
+<div id="dialog" class="dialog hidden">
+  <div class="box">
+    <p id="dialogtext"></p>
+    <div class="row">
+      <button class="nav" id="dialogyes">Yes</button>
+      <button class="nav" id="dialogno">Cancel</button>
+    </div>
+  </div>
+</div>
+<div id="busy" class="busy hidden"><div class="box"><div class="spinner"></div><p id="busytext"></p></div></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

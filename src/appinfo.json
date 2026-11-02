@@ -1,0 +1,13 @@
+{
+  "id": "com.homebrew.loginkeeper",
+  "version": "1.0.0",
+  "vendor": "Shantil-K",
+  "type": "web",
+  "main": "index.html",
+  "title": "Login Keeper",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "requiredPermissions": ["all"],
+  "resolution": "1920x1080",
+  "disableBackHistoryAPI": true
+}

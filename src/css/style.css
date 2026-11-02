@@ -1,0 +1,49 @@
+:root { --bg:#0b0f14; --card:#151b23; --card2:#1c2430; --text:#e8edf2; --dim:#8d99a6; --accent:#22d3ee; --good:#4ade80; --warn:#fbbf24; --bad:#f87171; }
+* { box-sizing:border-box; }
+html, body { margin:0; height:100%; overflow:hidden; }
+body { background:var(--bg); color:var(--text); font-family:"LG Smart UI","Museo Sans",Roboto,Arial,sans-serif; font-size:26px; padding:48px 80px; display:flex; flex-direction:column; }
+body > * { flex-shrink:0; }
+header { display:flex; align-items:center; margin-bottom:24px; }
+header img { width:96px; height:96px; margin-right:28px; }
+h1 { margin:0; font-size:52px; font-weight:600; }
+.sub { margin:6px 0 0; color:var(--dim); }
+h2 { font-size:26px; color:var(--dim); font-weight:500; margin:24px 0 12px; text-transform:uppercase; letter-spacing:2px; }
+.card { background:var(--card); border-radius:18px; padding:24px 30px; }
+.statusline { font-size:36px; font-weight:600; }
+.statusline.good { color:var(--good); } .statusline.warn { color:var(--warn); } .statusline.bad { color:var(--bad); }
+.detail { color:var(--dim); margin-top:8px; }
+.row { display:flex; align-items:stretch; }
+.row > * + * { margin-left:20px; }
+#actions { margin-top:24px; }
+button { font:inherit; color:var(--text); background:var(--card2); border:0; border-radius:14px; padding:18px 28px; outline:none; }
+button.toggle { display:flex; flex-direction:column; align-items:flex-start; text-align:left; }
+button.toggle .val { font-weight:600; margin-top:4px; }
+button.toggle.on .val { color:var(--good); } button.toggle.off .val { color:var(--dim); }
+button.big { background:#0e7490; font-weight:600; }
+button:focus, button.focus { box-shadow:inset 0 0 0 4px var(--accent); background:#243246; }
+button.big:focus { background:#0891b2; }
+button.danger:focus { box-shadow:inset 0 0 0 4px var(--bad); }
+.list { flex:1 1 auto; min-height:0; overflow:hidden; position:relative; }
+.item { display:flex; align-items:center; background:var(--card); border-radius:14px; padding:14px 22px; margin-bottom:12px; }
+.item .when { width:330px; } .item .when b { display:block; font-size:28px; } .item .when span { color:var(--dim); font-size:22px; }
+.item .apps { flex:1; color:var(--dim); font-size:22px; line-height:1.4; padding-right:20px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.item .apps .yt { color:var(--text); }
+.item button { padding:12px 22px; margin-left:12px; font-size:24px; }
+.tag { display:inline-block; font-size:18px; padding:2px 10px; border-radius:8px; background:var(--card2); color:var(--dim); margin-left:8px; vertical-align:middle; }
+.tag.keep { color:var(--accent); }
+.empty { color:var(--dim); padding:20px 0; }
+.log { font-family:inherit; background:var(--card); border-radius:14px; padding:14px 20px; margin:12px 0 0; color:var(--dim); font-size:20px; line-height:28px; height:112px; overflow:hidden; white-space:pre-wrap; }
+.foot { color:var(--dim); font-size:20px; margin:14px 0 0; }
+.dialog, .busy { position:fixed; inset:0; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.7); display:flex; align-items:center; justify-content:center; }
+.dialog .box, .busy .box { background:var(--card); border-radius:20px; padding:36px 44px; max-width:1100px; }
+.dialog p { font-size:30px; margin:0 0 28px; line-height:1.4; }
+.busy .box { display:flex; align-items:center; } .busy p { margin:0 0 0 24px; font-size:30px; }
+.spinner { width:48px; height:48px; border:5px solid var(--card2); border-top-color:var(--accent); border-radius:50%; animation:spin 1s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.hidden { display:none; }
+.chips { display:flex; flex-wrap:wrap; margin:-6px 0 0 -6px; }
+.chips button { margin:6px; padding:12px 22px 12px 18px; font-size:24px; display:flex; align-items:center; }
+.chips button .dot { width:22px; height:22px; border-radius:6px; border:3px solid var(--dim); margin-right:12px; flex:none; }
+.chips button.on .dot { background:var(--accent); border-color:var(--accent); }
+.chips button.off { color:var(--dim); }
+.item .apps .chosen { color:var(--text); }
