@@ -5,6 +5,7 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch: # run by hand to test the build; it publishes nothing
 
 permissions:
   contents: write
@@ -13,9 +14,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
 
@@ -23,6 +24,7 @@ jobs:
         run: npm install -g @webos-tools/cli@3.2.6
 
       - name: Check the app version matches the tag
+        if: github.ref_type == 'tag'
         run: |
           v=$(node -p "require('./src/appinfo.json').version")
           if [ "v$v" != "$GITHUB_REF_NAME" ]; then
@@ -39,7 +41,15 @@ jobs:
       - name: Build ipk
         run: ares-package src -o .
 
+      - name: Keep the build (manual runs)
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v7
+        with:
+          name: ipk
+          path: com.homebrew.loginkeeper_*_all.ipk
+
       - name: Publish release
+        if: github.ref_type == 'tag'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
