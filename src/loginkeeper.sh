@@ -111,6 +111,7 @@ writemeta() { # $1 name, $2 kind, $3 profile copy dir
 # takes, so the databases are not caught half-written, then compresses at low priority.
 dobackup() {
 	kind="$1"
+	if restoring; then log "backup skipped: a restore is running"; echo '{"ok":false,"error":"a restore is running"}'; return 1; fi
 	[ "$(df -m "$ROOT" | awk 'NR==2{print $4}')" -lt 100 ] && { log "backup skipped: less than 100 MB free"; echo '{"ok":false,"error":"less than 100 MB free"}'; return 1; }
 	name="$(date +%Y%m%d-%H%M%S)-$kind"
 	work="$TMP/$name"; rm -rf "$work"; mkdir -p "$work"
@@ -144,8 +145,13 @@ newestgood() { # newest backup that is not a pre-restore snapshot
 	ls "$BK" | grep -E '^[0-9]{8}-[0-9]{6}-(auto|manual)\.tgz$' | sort -r | head -n 1 | sed 's/\.tgz$//'
 }
 
-# Restore runs detached: stopping the web-app engine also closes the app that asked for it
-dorestore() {
+# True while a restore is running (it holds restore.lock)
+restoring() { [ -f "$ROOT/restore.lock" ] && ! flock -n "$ROOT/restore.lock" true 2>/dev/null; }
+
+# Restore runs detached: stopping the web-app engine also closes the app that asked for it.
+# It runs in a subshell so its lock is released when it ends, even when the daemon called it.
+dorestore() { ( restore_now "$@" ); }
+restore_now() {
 	name="$1"; relaunch="$2"
 	exec 9>"$ROOT/restore.lock"; flock -n 9 || { log "restore already running"; return 1; }
 	log "restore of $name started"
@@ -221,6 +227,8 @@ daemon() {
 	sleep ${LK_BOOTWAIT:-60}   # let the TV finish booting
 	while :; do
 		[ -f "$CONF" ] && . "$CONF"
+		# mid-restore the storage is being swapped: neither a backup nor a wipe check makes sense
+		if restoring; then sleep 60 8>&-; continue; fi
 		if iswiped; then
 			# storage was recreated: never back it up, offer or do a restore
 			if [ ! -f "$WIPED" ]; then date +%s > "$WIPED"; log "login data was reset (storage recreated)"; fi
